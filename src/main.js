@@ -18,9 +18,6 @@ const vuetify = createVuetify({
 
 const app = createApp(App)
 
-app.config.globalProperties.$provider = '123'
-app.config.globalProperties.$signer = '123'
-
 app.use(vuetify)
 app.use(router)
 
