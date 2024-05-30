@@ -5,7 +5,15 @@
     </v-row>
     <v-row justify="center" class="mt-10">
       <v-col cols="2" class="d-flex justify-end">
-        <p class="text-h6">contract id:</p>
+        <p class="text-h6">voter address:</p>
+      </v-col>
+      <v-col cols="5">
+        <p class="text-h6">{{ signerAddress }}</p>
+      </v-col>
+    </v-row>
+    <v-row justify="center" class="mt-0">
+      <v-col cols="2" class="d-flex justify-end">
+        <p class="text-h6">contract address:</p>
       </v-col>
       <v-col cols="5">
         <p class="text-h6">{{ contractAddress }}</p>
@@ -116,6 +124,7 @@ const voteTime = ref([])
 const voteStatus = ref(false)
 const remainTime = ref('-----------')
 const electionName = ref('')
+const signerAddress = ref('')
 
 let contractAddress = route.params.id
 let contractAbi = [
@@ -380,7 +389,6 @@ let contractAbi = [
     "type": "function"
   }
 ]
-let signerAddress
 let contractInstance
 
 
@@ -392,7 +400,7 @@ window.ethereum.on('accountsChanged', async () => {
   provider = new ethers.BrowserProvider(window.ethereum)
   await provider.send('eth_requestAccounts', [])
   signer = await provider.getSigner()
-  signerAddress = await signer.getAddress()
+  signerAddress.value = await signer.getAddress()
 });
 
 
@@ -520,7 +528,7 @@ async function connectWallet() {
     // that MetaMask manages for the user.
     signer = await provider.getSigner()
     let network = await provider.getNetwork()
-    signerAddress = await signer.getAddress()
+    signerAddress.value = await signer.getAddress()
     await provider.send('eth_requestAccounts', [])
     contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
   }
